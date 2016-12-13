@@ -52,3 +52,8 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 # for authentication
 gem 'devise', '~> 4.2'
+
+# for better_errors
+group :development do
+  gem "better_errors"
+end

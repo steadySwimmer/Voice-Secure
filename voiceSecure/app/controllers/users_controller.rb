@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user! # except: [:index, :show]
-  before_action :authorized_user, only: [:edit, :update, :destroy]
+    before_action :set_user, only: [:show, :edit, :update, :destroy]
+    before_filter :authenticate_user! #except: [:index, :show]
+  #before_action :authorized_user, only: [:edit, :update, :destroy]
 
   # GET /users
   # GET /users.json
@@ -21,8 +21,7 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
-    @user = User.edit
-    render :edit
+    @user = User.find(params[:id])
   end
 
   # POST /users

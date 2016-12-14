@@ -36,4 +36,6 @@ class User
   field :nickname, type: String
   field :email, type: String
   field :friends, type: Array
+
+  #has_many :messages
 end

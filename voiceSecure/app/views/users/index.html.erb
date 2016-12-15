@@ -2,40 +2,55 @@
 
 <h1>Users</h1>
 
+<!-- link bower package scripts -->
+<!-- <script src="../bower_components/recordrtc/RecordRTC.js"></script> -->
+<!-- CDN -->
+<script src="https://cdn.WebRTC-Experiment.com/RecordRTC.js"></script>
+<script src="//cdn.webrtc-experiment.com/navigator.customGetUserMediaBar.js"></script>
+<script src="https://cdn.webrtc-experiment.com/gumadapter.js"></script>
+
+
 <script>
-  var navigator = window.navigator;
-  navigator.getUserMedia = (
-  navigator.getUserMedia ||
-    navigator.webkitGetUserMedia ||
-    navigator.mozGetUserMedia ||
-    navigator.msGetUserMedia);
+  var recordRTC;
 
-  var Context = window.AudioContext || window.webkitAudioContext;
-  var context = new Context();
+  function successCallback(stream) {
+      // RecordRTC usage goes here
+      var options = {
+        mimeType: 'audio/wav', // or video/mp4 or audio/ogg
+        bitsPerSecond: 128000 // if this line is provided, skip above two
+      };
+      recordRTC = RecordRTC(stream, options);
+  }
 
-  var mediaStream;
-var rec;
+  function errorCallback(error) {
+      // maybe another application is using the device
+  }
 
-function record() {
-  // ask for permission and start recording
-  navigator.getUserMedia({audio: true}, function(localMediaStream){
-    mediaStream = localMediaStream;
+  var mediaConstraints = { video: false, audio: true };
 
-    // create a stream source to pass to Recorder.js
-    var mediaStreamSource = context.createMediaStreamSource(localMediaStream);
+  navigator.mediaDevices.getUserMedia(mediaConstraints).then(successCallback).catch(errorCallback);
 
-    // create new instance of Recorder.js using the mediaStreamSource
-    rec = new Recorder(mediaStreamSource, {
-      // pass the path to recorderWorker.js file here
-      workerPath: '/bower_components/Recorderjs/recorderWorker.js'
+  function start() {
+      recordRTC.startRecording();
+  }
+
+  function stop() {
+
+    recordRTC.stopRecording(function() {
+      alert('stop');
+      recordRTC.save('pum.wav');
+      recordRTC.write();
+
+      audio.src = '';
+      alert('hey');
+      var recordedBlob = recordRTC.getBlob();
+      recordRTC.getDataURL(function(dataURL) { });
+
+      
+      
     });
+  };
 
-    // start recording
-    rec.record();
-  }, function(err){
-    console.log('Browser not supported');
-  });
-}
 </script>
 
 <table>
@@ -47,8 +62,8 @@ function record() {
     </tr>
   </thead>
 
-<button onclick="record()">Record</button>
-<button onclick="stop()">Stop</button>
+<button id='btnStartRecording' onclick="start()">Record</button>
+<button id='btnStopRecording' onclick="stop()">Stop</button>
 
   <tbody>
     <% @users.each do |user| %>

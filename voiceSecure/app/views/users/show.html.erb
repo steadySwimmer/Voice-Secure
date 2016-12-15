@@ -2,9 +2,7 @@
 
 <p>
   <strong>Nickname:</strong>
-  <%if @user.friends%>
     <%= @user.nickname %>
-  <%end%>
 </p>
 
 <p>
@@ -14,9 +12,7 @@
 
 <p>
   <strong>Friends:</strong>
-  <%if @user.friends%>
     <%= @user.friends %>
-  <%end%>
 </p>
 
 <%= link_to 'Edit', edit_user_path(@user) %> |

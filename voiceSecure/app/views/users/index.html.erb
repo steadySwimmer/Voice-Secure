@@ -2,6 +2,42 @@
 
 <h1>Users</h1>
 
+<script>
+  var navigator = window.navigator;
+  navigator.getUserMedia = (
+  navigator.getUserMedia ||
+    navigator.webkitGetUserMedia ||
+    navigator.mozGetUserMedia ||
+    navigator.msGetUserMedia);
+
+  var Context = window.AudioContext || window.webkitAudioContext;
+  var context = new Context();
+
+  var mediaStream;
+var rec;
+
+function record() {
+  // ask for permission and start recording
+  navigator.getUserMedia({audio: true}, function(localMediaStream){
+    mediaStream = localMediaStream;
+
+    // create a stream source to pass to Recorder.js
+    var mediaStreamSource = context.createMediaStreamSource(localMediaStream);
+
+    // create new instance of Recorder.js using the mediaStreamSource
+    rec = new Recorder(mediaStreamSource, {
+      // pass the path to recorderWorker.js file here
+      workerPath: '/bower_components/Recorderjs/recorderWorker.js'
+    });
+
+    // start recording
+    rec.record();
+  }, function(err){
+    console.log('Browser not supported');
+  });
+}
+</script>
+
 <table>
   <thead>
     <tr>
@@ -11,15 +47,15 @@
     </tr>
   </thead>
 
+<button onclick="record()">Record</button>
+<button onclick="stop()">Stop</button>
+
   <tbody>
     <% @users.each do |user| %>
       <tr>
         <td><%= user.nickname %></td>
         <td><%= user.email %></td>
-        <td><%= user.friends %></td>
-        <td><%= link_to 'Show', user %></td>
-        <td><%= link_to 'Edit', edit_user_path(user) %></td>
-<!--        <td><%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' } %></td> -->
+        <!--<td><%= user.friends %></td>-->
       </tr>
     <% end %>
   </tbody>

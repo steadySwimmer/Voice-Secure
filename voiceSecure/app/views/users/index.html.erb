@@ -3,7 +3,6 @@
 <h1>Users</h1>
 
 <!-- link bower package scripts -->
-<!-- <script src="../bower_components/recordrtc/RecordRTC.js"></script> -->
 <!-- CDN -->
 <script src="https://cdn.WebRTC-Experiment.com/RecordRTC.js"></script>
 <script src="//cdn.webrtc-experiment.com/navigator.customGetUserMediaBar.js"></script>
@@ -12,7 +11,6 @@
 
 <script>
   var recordRTC;
-
   function successCallback(stream) {
       // RecordRTC usage goes here
       var options = {
@@ -34,23 +32,67 @@
       recordRTC.startRecording();
   }
 
+
+  function upload_two(audio_blob) {
+    audio_blob.lastModifiedDate = new Date();
+      audio_blob.name = 'my.wav';
+      var my_file = audio_blob
+
+      var fd = new FormData();
+      fd.append('fname', 'my.wav');
+      fd.append('data', my_file);
+      $.ajax({
+          type: 'POST',
+          url: '/users',
+          data: fd,
+          processData: false,
+          contentType: false
+      }).done(function(data) {
+             console.log(data);
+      });
+  }
+
+  function upload(blobOrFile) {
+    var formData = new FormData();
+    formData.append('voice', blobOrFile, (new Date().getTime() + '.wav'));
+
+    $.ajax({
+        type: "POST",
+        url: "/record",
+        data: formData, 
+        processData: false,
+        contentType: false
+    });
+    // $.post('http://localhost:3000/users', {str: blobOrFile});
+  }
+
+  function readArray(audioBlob) {
+    var reader = new FileReader();
+    reader.addEventListener("loadend", function() {
+      var answer = reader.result;
+      // console.log(reader.result);
+      return answer;
+    });
+    reader.readAsBinaryString(audioBlob);
+  }
+
   function stop() {
 
-    recordRTC.stopRecording(function() {
-      alert('stop');
-      recordRTC.save('pum.wav');
-      recordRTC.write();
+    recordRTC.stopRecording(function(audioURL) {
+      // recordRTC.save('pum.wav');
+      // window.open(recordRTC.toURL());
 
-      audio.src = '';
-      alert('hey');
-      var recordedBlob = recordRTC.getBlob();
-      recordRTC.getDataURL(function(dataURL) { });
+      var audio_blob = recordRTC.blob;
+      console.log(audio_blob.type);
+      audio_blob.name = "pum.wav";
 
-      
-      
+      // var blobBinary = readArray(audio_blob);
+
+      upload(audio_blob);
     });
-  };
 
+  };
+  
 </script>
 
 <table>
@@ -75,6 +117,4 @@
     <% end %>
   </tbody>
 </table>
-
-<br>
 

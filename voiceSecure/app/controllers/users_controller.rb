@@ -1,3 +1,5 @@
+require 'open-uri'
+
 class UsersController < ApplicationController
     before_action :set_user, only: [:show, :edit, :update, :destroy]
     before_filter :authenticate_user! #except: [:index, :show]
@@ -6,6 +8,7 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
+    puts 'HEEEYY!!'
     @users = User.all
   end
 
@@ -39,6 +42,24 @@ class UsersController < ApplicationController
       end
     end
   end
+
+  # POST /record
+  def record 
+    puts 'BYEE!!'
+    puts params[:voice]
+    audio = params[:voice]
+    
+    save_path = Rails.root.join("/Users/ivan/Desktop/#{audio.original_filename}")
+
+    audio.rewind
+        # Open and write the file to file system.
+    File.open(save_path, 'wb') do |f|
+      f.write audio.read
+    end
+
+  end
+
+
 
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json

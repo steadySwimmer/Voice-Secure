@@ -4,7 +4,6 @@ class UsersController < ApplicationController
     before_action :set_user, only: [:show, :edit, :update, :destroy]
     before_filter :authenticate_user! #except: [:index, :show]
   #before_action :authorized_user, only: [:edit, :update, :destroy]
-
   # GET /users
   # GET /users.json
   def index
@@ -49,14 +48,14 @@ class UsersController < ApplicationController
     puts params[:voice]
     audio = params[:voice]
     
-    save_path = Rails.root.join("/Users/ivan/Desktop/#{audio.original_filename}")
+    save_path = Rails.root.join("/home/vpodilnyk/projects/ruby/#{audio.original_filename}")
 
     audio.rewind
-        # Open and write the file to file system.
+    # Open and write the file to file system.
     File.open(save_path, 'wb') do |f|
       f.write audio.read
     end
-
+    redirect_to :controller => "users" , :action => 'index', :alert => 1
   end
 
 

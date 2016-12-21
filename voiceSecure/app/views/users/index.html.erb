@@ -32,30 +32,9 @@
       recordRTC.startRecording();
   }
 
-
-  function upload_two(audio_blob) {
-    audio_blob.lastModifiedDate = new Date();
-      audio_blob.name = 'my.wav';
-      var my_file = audio_blob
-
-      var fd = new FormData();
-      fd.append('fname', 'my.wav');
-      fd.append('data', my_file);
-      $.ajax({
-          type: 'POST',
-          url: '/users',
-          data: fd,
-          processData: false,
-          contentType: false
-      }).done(function(data) {
-             console.log(data);
-      });
-  }
-
   function upload(blobOrFile) {
     var formData = new FormData();
     formData.append('voice', blobOrFile, (new Date().getTime() + '.wav'));
-
     $.ajax({
         type: "POST",
         url: "/record",
@@ -63,31 +42,11 @@
         processData: false,
         contentType: false
     });
-    // $.post('http://localhost:3000/users', {str: blobOrFile});
-  }
-
-  function readArray(audioBlob) {
-    var reader = new FileReader();
-    reader.addEventListener("loadend", function() {
-      var answer = reader.result;
-      // console.log(reader.result);
-      return answer;
-    });
-    reader.readAsBinaryString(audioBlob);
   }
 
   function stop() {
-
     recordRTC.stopRecording(function(audioURL) {
-      // recordRTC.save('pum.wav');
-      // window.open(recordRTC.toURL());
-
       var audio_blob = recordRTC.blob;
-      console.log(audio_blob.type);
-      audio_blob.name = "pum.wav";
-
-      // var blobBinary = readArray(audio_blob);
-
       upload(audio_blob);
     });
 
@@ -100,7 +59,7 @@
     <tr>
       <th>Nickname</th>
       <th>Email</th>
-      <!--<th colspan="3"></th>-->
+      <th colspan="3"></th>
     </tr>
   </thead>
 
@@ -112,7 +71,7 @@
       <tr>
         <td><%= user.nickname %></td>
         <td><%= user.email %></td>
-        <!--<td><%= user.friends %></td>-->
+        <td><%= user.friends %></td>
       </tr>
     <% end %>
   </tbody>

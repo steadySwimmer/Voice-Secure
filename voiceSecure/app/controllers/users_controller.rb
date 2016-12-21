@@ -1,4 +1,6 @@
+$LOAD_PATH << '/Users/ivan/Developer/Voice-secure/encrypt_part'
 require 'open-uri'
+require 'test'
 
 class UsersController < ApplicationController
     before_action :set_user, only: [:show, :edit, :update, :destroy]
@@ -45,17 +47,25 @@ class UsersController < ApplicationController
 
   # POST /record
   def record 
-    puts 'BYEE!!'
-    puts params[:voice]
     audio = params[:voice]
     
-    save_path = Rails.root.join("/Users/ivan/Desktop/#{audio.original_filename}")
+    save_path = ("/Users/ivan/Desktop/#{audio.original_filename}")
 
     audio.rewind
-        # Open and write the file to file system.
+
     File.open(save_path, 'wb') do |f|
       f.write audio.read
     end
+    result = Test.encrypt_mp3_file(save_path)
+    File.delete(save_path)
+    
+    my_rand = Random.new
+    new_save_path = "/Users/ivan/Developer/Voice-Secure/voiceSecure/Encrypted_files/" + "%d" % my_rand.rand(0..100)
+    puts new_save_path
+
+    new_file = File.open(new_save_path, "wb")
+    new_file.puts(result)
+    new_file.close()
 
   end
 

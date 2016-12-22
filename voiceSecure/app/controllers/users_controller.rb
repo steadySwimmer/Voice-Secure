@@ -13,6 +13,9 @@ class UsersController < ApplicationController
     else
       @another_user = @users.first
     end
+
+    @from_msg = Message.where({from_email: current_user.email, to_email: @another_user.email})
+    @to_msg = Message.where({from_email: @another_user.email, to_email: current_user.email})
   end
 
   # GET /users/1
@@ -62,6 +65,10 @@ class UsersController < ApplicationController
     redirect_to :controller => "users" , :action => 'index', :alert => 1
   end
 
+  #GET /play/url
+  def play
+
+  end
 
 
   # PATCH/PUT /users/1

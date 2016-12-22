@@ -94,9 +94,14 @@
                 <div class="avatar">
                   <%= image_tag "default_profile.png" %>
                 </div>
-                <div class="name">Chater</div>
+                <div class="name"><%= @another_user.nickname %></div>
+
                 <div class="text">
-                  <%= image_tag "music_icon.png", :class => "sound"%>
+                  <audio controls>
+                    <source src="horse.ogg" type="audio/ogg">
+                    <source src="horse.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                  </audio>
                 </div>
               </div>
 
@@ -106,7 +111,11 @@
                 </div>
                 <div class="name"><%= current_user.nickname %></div>
                 <div class="text">
-                  <%= image_tag "music_icon.png", :class => "sound"%>
+                  <audio controls>
+                    <source src="horse.ogg" type="audio/ogg">
+                    <source src="horse.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                  </audio>
                 </div>
                 <br />
               </div>
@@ -116,8 +125,9 @@
                 <h16>Record your message</h16><br / >
                 <div class="btn-group">
                   <button type="button" class="btn btn-primary" id='btnStartRecording' onclick="start()">Record</button>
-                  <button type="button" class="btn btn-primary" id='btnStopRecording' onclick="stop()">Stop</button>
-                  <button type="button" class="btn btn-primary">Send</button>
+                  <button type="button" class="btn btn-danger" id='btnStopRecording' onclick="stop()">
+                  <%= link_to "Stop", rec_path(:user_id => @another_user.id)%>
+                  </button>
                 </div> 
               </div>
             </div>

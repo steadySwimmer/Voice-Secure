@@ -9,8 +9,15 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    @users = User.not.in(_id: [current_user.id])
-    @current_user = current_user
+    @users = User.not.in(_id: [current_user.id])   
+    if params.key?(:id)
+      @another_user = User.find(params[:id])
+    else
+      @another_user = @users.first
+    end
+
+    @from_msg = Message.where({from_email: current_user.email, to_email: @another_user.email})
+    @to_msg = Message.where({from_email: @another_user.email, to_email: current_user.email})
   end
 
   # GET /users/1
@@ -78,7 +85,6 @@ class UsersController < ApplicationController
 
     Test.decrypt(result, 'pol.wav')
   end
-
 
 
   # PATCH/PUT /users/1

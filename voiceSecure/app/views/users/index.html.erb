@@ -91,28 +91,16 @@
           <div class="col-inside-lg decor-default chat" style="overflow: hidden; outline: none;" tabindex="5000">
             <div class="chat-users">
               <h6>Online</h6>
+              <% @users.each do |user| %>
+                <%= link_to msg_path(:id => user.id) do %>
                 <div class="user">
                     <div class="avatar">
                     <%= image_tag "default_profile.png" %>
                     </div>
-                    <div class="name">User name</div>
-        
+                    <div class="name"><%= user.nickname %></div>
                 </div>
-                <div class="user">
-                    <div class="avatar">
-                    <%= image_tag "default_profile.png" %>
-                    </div>
-                    <div class="name">User name</div>
-  
-                </div>
-                <div class="user">
-                    <div class="avatar">
-                    <%= image_tag "default_profile.png" %>
-                    </div>
-                    <div class="name">User name</div>
-                </div>
-    
-          
+                <% end %>
+              <% end %>
             </div>
           </div>
         </div>
@@ -156,10 +144,19 @@
         </div>
       </div>
     </div>
+
     <script>
       $(function(){
         $(".chat").niceScroll();
       })
+    </script>
+
+    <script>
+      jQuery(document).ready(function($) {
+        $(".clickable-row").click(function() {
+          window.document.location = $(this).data("href");
+        });
+      });
     </script>
 
 </body>

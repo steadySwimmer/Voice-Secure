@@ -8,7 +8,7 @@ class UsersController < ApplicationController
   # GET /users.json
   def index
     puts 'HEEEYY!!'
-    @users = User.all
+    @users = User.not.in(_id: [current_user.id])
   end
 
   # GET /users/1

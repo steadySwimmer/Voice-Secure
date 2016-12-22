@@ -9,6 +9,8 @@ class UsersController < ApplicationController
   def index
     puts 'HEEEYY!!'
     @users = User.not.in(_id: [current_user.id])
+    @curr_user = current_user
+    @another_user = params
   end
 
   # GET /users/1

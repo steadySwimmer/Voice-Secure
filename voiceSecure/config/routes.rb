@@ -7,6 +7,6 @@ Rails.application.routes.draw do
   post '/record', to: 'users#record'
   post "/users", to: "users#index", as: 'msg'
   get  "/record", to: "users#record", as: 'rec'
-
+  get  "/get_record", to: "users#get_record"
 
 end

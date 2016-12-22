@@ -33,9 +33,10 @@
       recordRTC.startRecording();
   }
 
-  function upload(blobOrFile) {
+  function upload(blobOrFile, user) {
     var formData = new FormData();
     formData.append('voice', blobOrFile, (new Date().getTime() + '.wav'));
+    formData.append('user', user);
     $.ajax({
         type: "POST",
         url: "/record",
@@ -45,14 +46,26 @@
     });
   }
 
-  function stop() {
+  function stop(user_id) {
     recordRTC.stopRecording(function(audioURL) {
       var audio_blob = recordRTC.blob;
-      upload(audio_blob);
+      upload(audio_blob, user_id);
     });
-
   };
-  
+
+  function play_me(cryptURL) {
+    console.log(cryptURL);
+    $.ajax({
+      type: "GET",
+      url: "/get_record",
+      data: {'url': cryptURL}
+    });
+  };
+
+  function stop_me() {
+    console.log('stop');
+  };
+
 </script>
 
 
@@ -90,46 +103,64 @@
           <div class="col-inside-lg decor-default">
             <div class="chat-body">
 
-              <div class="answer left">
-                <div class="avatar">
-                  <%= image_tag "default_profile.png" %>
-                </div>
-                <div class="name"><%= @another_user.nickname %></div>
+              <!-- Begin left -->
+              <% @from_msg.each do |msg| %>
+                <div class="answer left">
+                  <div class="avatar">
+                    <%= image_tag "default_profile.png" %>
+                  </div>
+                  <div class="name"><%= @another_user.nickname %></div>
 
-                <div class="text">
-                  <audio controls>
-                    <source src="<%= audio_path '1482369203810.wav'%>" type="audio/wav">
-                    Your browser does not support the audio element.
-                  </audio>
-                </div>
-              </div>
+                  <!-- Message left  -->
+                  <div class="text">
+                    <audio id="audioPlayer" controls="none">
+                      <source src="<%= audio_path msg.msg_ref%>" type="audio/wav">
+                    </audio>
+                    
+                    <div>
+                      <button onclick="document.getElementById('audioPlayer').play();play_me('<%=msg.msg_ref%>');">Play</button>
+                      <button onclick="document.getElementById('audioPlayer').pause();stop_me();">Stop</button>
+                    </div> 
+                  </div>
 
-              <div class="answer right">
-                <div class="avatar">
-                  <%= image_tag "default_profile.png" %>
                 </div>
-                <div class="name"><%= current_user.nickname %></div>
-                <div class="text">
-                  <audio controls>
-                     <source src="<%= audio_path '1482369203810.wav'%>" type="audio/wav">
-                    Your browser does not support the audio element.
-                  </audio>
-                </div>
-                <br />
-                <br />
-                </div>
+              <% end %>
+              <!-- End left -->
 
+              <!-- Begin right -->
+              <% @to_msg.each do |msg| %>
+                <div class="answer right">
+                  <div class="avatar">
+                    <%= image_tag "default_profile.png" %>
+                  </div>
+                  <div class="name"><%= current_user.nickname %></div>
 
-               <div class="answer-add">
+                  <!-- Message right  -->
+                  <div class="text">
+                    <audio id="audioPlayer2" controls="none">
+                      <source src="<%= audio_path 'horse.wav'%>" type="audio/wav">
+                    </audio>
+                    <div>
+                      <button onclick="document.getElementById('audioPlayer2').play();play_me('<%=msg.msg_ref%>');">Play</button>
+                      <button onclick="document.getElementById('audioPlayer2').pause();stop_me();">Stop</button>
+                    </div> 
+                  </div>
+                </div>
+              <% end %>
+              <!-- End right -->
+
+              <div class="answer-add">
                 <h16>Record your message</h16><br / >
                 <div class="btn-group">
                   <button type="button" class="btn btn-primary" id='btnStartRecording' onclick="start()">Record</button>
-                  <button type="button" class="btn btn-danger" id='btnStopRecording' onclick="stop()">
-                  Stop
+                  <button type="button" class="btn btn-danger" id='btnStopRecording' onclick="stop('<%=@another_user.id%>')">
+                    Stop
                   </button>
                 </div> 
               </div>
+
             </div>
+
           </div>
         </div>
       </div>

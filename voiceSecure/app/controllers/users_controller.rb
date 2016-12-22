@@ -1,6 +1,6 @@
-$LOAD_PATH << Rails.root.join('../encrypt_part/')
+$LOAD_PATH << Rails.root.join('../encrypt_part')
 require 'open-uri'
-require 'test'
+require 'crypt'
 
 class UsersController < ApplicationController
     before_action :set_user, only: [:show, :edit, :update, :destroy]
@@ -19,6 +19,7 @@ class UsersController < ApplicationController
 
     @from_msg = Message.where({from_email: current_user.email, to_email: @another_user.email})
     @to_msg = Message.where({from_email: @another_user.email, to_email: current_user.email})
+
   end
 
   # GET /users/1
@@ -55,36 +56,44 @@ class UsersController < ApplicationController
   # POST /record
   def record 
     audio = params[:voice]
+    puts params[:user]
+    msg_ref = save_file audio
 
-    save_file audio
+    @another_user = User.find(params[:user])
+    puts @another_user
+    msg = Message.create(from_email: current_user.email, to_email: @another_user.email, msg_ref: msg_ref)
 
     redirect_to :controller => "users" , :action => 'index', :alert => 1
   end
 
   def save_file (audio_file) 
-    audio_file.rewind
-    my_rand = Random.new
-    save_path = Rails.root.join("Encrypted_files/#{my_rand.rand(1..10)}_#{audio_file.original_filename}")
+    begin 
+      audio_file.rewind
+      my_rand = Random.new
+      save_path = Rails.root.join("Encrypted_files/#{my_rand.rand(1..10)}_#{audio_file.original_filename}")
 
-    File.open(save_path, 'w:ASCII-8BIT') do |f|
-      f.write audio_file.read
+      File.open(save_path, 'wb') do |f|
+        f.write audio_file.read
+      end
+
+      crypt_file_url = Crypt.encrypt save_path
+      File.delete(save_path)
+      return crypt_file_url
+    rescue Exception => exc 
+      puts "Troubles with #{audio_file}; #{exc.message}"
     end
+  end
 
-    result = Test.encrypt(save_path)
-    File.delete(save_path)
-
+  # GET /get_record
+  def get_record
+    puts 'Get record'
+    puts params[:url]
+    redirect_to :controller => "users" , :action => 'index'
   end
 
   def take_file 
-    my_rand = Random.new
-    Test.decrypt(result, "Encrypted_files/new#{my_rand.rand(1..10)}.wav")
+    # Crypt.decrypt #URL
 
-    new_save_path =  Rails.root.join("Encrypted_files/" + "%d" % my_rand.rand(0..1000000))
-    new_file = File.open(new_save_path, "wSCII-8BIT")
-    new_file.puts(result)
-    new_file.close()
-
-    Test.decrypt(result, 'pol.wav')
   end
 
 

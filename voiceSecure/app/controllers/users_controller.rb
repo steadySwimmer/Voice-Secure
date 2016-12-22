@@ -7,8 +7,12 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    @users = User.not.in(_id: [current_user.id])
-    @current_user = current_user
+    @users = User.not.in(_id: [current_user.id])   
+    if params.key?(:id)
+      @another_user = User.find(params[:id])
+    else
+      @another_user = @users.first
+    end
   end
 
   # GET /users/1

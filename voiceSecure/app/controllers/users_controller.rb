@@ -6,12 +6,11 @@ class UsersController < ApplicationController
     before_action :set_user, only: [:show, :edit, :update, :destroy]
     before_filter :authenticate_user! #except: [:index, :show]
   #before_action :authorized_user, only: [:edit, :update, :destroy]
-
   # GET /users
   # GET /users.json
   def index
-    puts 'HEEEYY!!'
-    @users = User.all
+    @users = User.not.in(_id: [current_user.id])
+    @current_user = current_user
   end
 
   # GET /users/1
@@ -48,25 +47,36 @@ class UsersController < ApplicationController
   # POST /record
   def record 
     audio = params[:voice]
-    
-    save_path = ("/Users/ivan/Desktop/#{audio.original_filename}")
 
-    audio.rewind
+    save_file audio
 
-    File.open(save_path, 'wb') do |f|
-      f.write audio.read
-    end
-    result = Test.encrypt_mp3_file(save_path)
-    File.delete(save_path)
-    
+    redirect_to :controller => "users" , :action => 'index', :alert => 1
+  end
+
+  def save_file (audio_file) 
+    audio_file.rewind
     my_rand = Random.new
-    new_save_path = "/Users/ivan/Developer/Voice-Secure/voiceSecure/Encrypted_files/" + "%d" % my_rand.rand(0..100)
-    puts new_save_path
+    save_path = Rails.root.join("Encrypted_files/#{my_rand.rand(1..10)}_#{audio_file.original_filename}")
 
-    new_file = File.open(new_save_path, "wb")
+    File.open(save_path, 'w:ASCII-8BIT') do |f|
+      f.write audio_file.read
+    end
+
+    result = Test.encrypt(save_path)
+    File.delete(save_path)
+
+  end
+
+  def take_file 
+    my_rand = Random.new
+    Test.decrypt(result, "Encrypted_files/new#{my_rand.rand(1..10)}.wav")
+
+    new_save_path =  Rails.root.join("Encrypted_files/" + "%d" % my_rand.rand(0..1000000))
+    new_file = File.open(new_save_path, "wSCII-8BIT")
     new_file.puts(result)
     new_file.close()
 
+    Test.decrypt(result, 'pol.wav')
   end
 
 

@@ -58,9 +58,7 @@
     $.ajax({
       type: "GET",
       url: "/get_record",
-      data: {'url': cryptURL},
-      processData: false,
-      contentType: false
+      data: {'url': cryptURL}
     });
   };
 
@@ -106,7 +104,7 @@
             <div class="chat-body">
               
               <!-- Begin left -->
-              <% @from_msg.each do |msg| %>
+              <% @to_msg.each do |msg| %>
                 <div class="answer left">
                   <div class="avatar">
                     <%= image_tag "default_profile.png" %>
@@ -116,7 +114,7 @@
                   <!-- Message left  -->
                   <div class="text">
                     <audio id="audioPlayer" controls="none">
-                      <source src="<%= audio_path msg.msg_ref%>" type="audio/wav">
+                      <source src="<%=audio_path msg.msg_ref%>" type="audio/wav">
                     </audio>
                     
                     <div>
@@ -129,7 +127,7 @@
               <!-- End left -->
 
               <!-- Begin right -->
-              <% @to_msg.each do |msg| %>
+              <% @from_msg.each do |msg| %>
                 <div class="answer right">
                   <div class="avatar">
                     <%= image_tag "default_profile.png" %>
@@ -139,7 +137,7 @@
                   <!-- Message right  -->
                   <div class="text">
                     <audio id="audioPlayer2" controls="none">
-                      <source src="<%= audio_path 'horse.wav'%>" type="audio/wav">
+                      <source src="<%=audio_path msg.msg_ref%>" type="audio/wav">
                     </audio>
                     <div>
                       <button onclick="document.getElementById('audioPlayer2').play();play_me('<%=msg.msg_ref%>');">Play</button>

@@ -87,7 +87,8 @@ class UsersController < ApplicationController
   def get_record
     puts 'Get record'
     puts params[:url]
-    redirect_to :controller => "users" , :action => 'index'
+
+    redirect_to :controller => "users" , :action => 'index' 
   end
 
   def take_file 

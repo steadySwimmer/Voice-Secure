@@ -20,7 +20,7 @@ module Crypt
             crypt_string = (Base64.encode64(crypt))
             
             my_rand = Random.new
-            file_name = "Encrypted_files/crypt#{my_rand.rand(1..100000000000)}"
+            file_name = "app/assets/audios/crypt#{my_rand.rand(1..100000000000)}"
             #file_name = "crypt#{my_rand.rand(1..100000000000)}"
             file = File.open(file_name, "wb")
             file.puts(crypt_string)
@@ -47,7 +47,7 @@ module Crypt
             crypt << cipher.final()
 
             my_rand = Random.new
-            file_name = "Encrypted_files/audio#{my_rand.rand(1..1000000000000)}.wav"
+            file_name = "app/assets/audios/audio#{my_rand.rand(1..1000000000000)}.wav"
             #file_name = "audio#{my_rand.rand(1..1000000000000)}.wav"
             new_file = File.open(file_name, 'wb')
             new_file.puts(crypt)

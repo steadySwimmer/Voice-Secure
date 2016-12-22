@@ -18,6 +18,7 @@ class UsersController < ApplicationController
 
     @from_msg = Message.where({from_email: current_user.email, to_email: @another_user.email})
     @to_msg = Message.where({from_email: @another_user.email, to_email: current_user.email})
+
   end
 
   # GET /users/1
@@ -82,8 +83,16 @@ class UsersController < ApplicationController
     end
   end
 
+  # GET /get_record
+  def get_record
+    puts 'Get record'
+    puts params[:url]
+    redirect_to :controller => "users" , :action => 'index'
+  end
+
   def take_file 
     # Crypt.decrypt #URL
+
   end
 
 

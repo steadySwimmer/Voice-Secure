@@ -51,7 +51,7 @@ class UsersController < ApplicationController
     puts 'BYEE!!'
     puts params[:voice]
     audio = params[:voice]
-    puts Rails.root
+    puts params[:user_id]
     # save_path = Rails.root.join("/#{audio.original_filename}")
     
     # audio.rewind

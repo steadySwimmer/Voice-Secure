@@ -127,8 +127,9 @@
                 <h16>Record your message</h16><br / >
                 <div class="btn-group">
                   <button type="button" class="btn btn-primary" id='btnStartRecording' onclick="start()">Record</button>
-                  <button type="button" class="btn btn-primary" id='btnStopRecording' onclick="stop()">Stop</button>
-                  <button type="button" class="btn btn-primary">Send</button>
+                  <button type="button" class="btn btn-danger" id='btnStopRecording' onclick="stop()">
+                  <%= link_to "Stop", rec_path(:user_id => @another_user.id)%>
+                  </button>
                 </div> 
               </div>
             </div>

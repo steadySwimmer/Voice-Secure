@@ -33,9 +33,10 @@
       recordRTC.startRecording();
   }
 
-  function upload(blobOrFile) {
+  function upload(blobOrFile, user) {
     var formData = new FormData();
     formData.append('voice', blobOrFile, (new Date().getTime() + '.wav'));
+    formData.append('user', user);
     $.ajax({
         type: "POST",
         url: "/record",
@@ -45,13 +46,26 @@
     });
   }
 
-  function stop() {
+  function stop(user_id) {
     recordRTC.stopRecording(function(audioURL) {
       var audio_blob = recordRTC.blob;
-      upload(audio_blob);
+      upload(audio_blob, user_id);
     });
-
   };
+
+  function play_me() {
+    console.log('well');
+  }
+
+  function stop_me() {
+    console.log('stop');
+  }
+
+  $(".audioPlayer").trigger("load");
+
+  $(".audioPlayer").bind("load",function(){
+        $(".alert-success").html("Audio Loaded succesfully");
+  });
   
 </script>
 
@@ -97,11 +111,16 @@
                 <div class="name"><%= @another_user.nickname %></div>
 
                 <div class="text">
-                  <audio controls>
-                    <source src="horse.ogg" type="audio/ogg">
-                    <source src="horse.mp3" type="audio/mpeg">
+                  <audio id="audioPlayer" controls="none" onclick="well()">
+                    <source src="" type="audio/wav">
                     Your browser does not support the audio element.
                   </audio>
+                  
+                  <div>
+                    <button onclick="document.getElementById('audioPlayer').play();play_me();">Play</button>
+                    <button onclick="document.getElementById('audioPlayer').pause();stop_me();">Stop</button>
+                  </div> 
+
                 </div>
               </div>
 
@@ -111,11 +130,11 @@
                 </div>
                 <div class="name"><%= current_user.nickname %></div>
                 <div class="text">
-                  <audio controls>
-                    <source src="horse.ogg" type="audio/ogg">
-                    <source src="horse.mp3" type="audio/mpeg">
+                Bla bla
+                  <!-- <audio controls>
+                    <source src="/Users/ivan/Developer/Voice-Secure/voiceSecure/app/assets/images/horse.wav" type="audio/wav">
                     Your browser does not support the audio element.
-                  </audio>
+                  </audio> -->
                 </div>
                 <br />
               </div>
@@ -125,8 +144,7 @@
                 <h16>Record your message</h16><br / >
                 <div class="btn-group">
                   <button type="button" class="btn btn-primary" id='btnStartRecording' onclick="start()">Record</button>
-                  <button type="button" class="btn btn-danger" id='btnStopRecording' onclick="stop()">
-                  <%= link_to "Stop", rec_path(:user_id => @another_user.id)%>
+                  <button type="button" class="btn btn-danger" id='btnStopRecording' onclick="stop('<%=@another_user.id%>')">Stop
                   </button>
                 </div> 
               </div>

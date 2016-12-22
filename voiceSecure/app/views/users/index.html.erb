@@ -50,7 +50,6 @@
     var reader = new FileReader();
     reader.addEventListener("loadend", function() {
       var answer = reader.result;
-      // console.log(reader.result);
       return answer;
     });
     reader.readAsBinaryString(audioBlob);
@@ -59,15 +58,7 @@
   function stop() {
 
     recordRTC.stopRecording(function(audioURL) {
-      // recordRTC.save('pum.wav');
-      // window.open(recordRTC.toURL());
-
       var audio_blob = recordRTC.blob;
-      console.log(audio_blob.type);
-      audio_blob.name = "pum.wav";
-
-      // var blobBinary = readArray(audio_blob);
-
       upload(audio_blob);
     });
 
@@ -113,9 +104,9 @@
                 <div class="avatar">
                   <%= image_tag "default_profile.png" %>
                 </div>
-                <div class="name">Alexander Herthic</div>
+                <div class="name">Chater</div>
                 <div class="text">
-                  Lorem ipsum dolor amet, consectetur adipisicing elit Lorem ipsum dolor amet, consectetur adipisicing elit Lorem ipsum dolor amet, consectetur adiping elit
+                  <%= image_tag "music_icon.png", :class => "sound"%>
                 </div>
               </div>
 
@@ -123,9 +114,9 @@
                 <div class="avatar">
                   <%= image_tag "default_profile.png" %>
                 </div>
-                <div class="name">Alexander Herthic</div>
+                <div class="name"><%= current_user.nickname %></div>
                 <div class="text">
-                  Lorem ipsum dolor amet, consectetur adipisicing elit Lorem ipsum dolor amet, consectetur adipisicing elit Lorem ipsum dolor amet, consectetur adiping elit
+                  <%= image_tag "music_icon.png", :class => "sound"%>
                 </div>
                 <br />
               </div>

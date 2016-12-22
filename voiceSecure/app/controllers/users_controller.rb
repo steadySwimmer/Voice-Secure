@@ -7,8 +7,8 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    puts 'HEEEYY!!'
     @users = User.not.in(_id: [current_user.id])
+    @current_user = current_user
   end
 
   # GET /users/1
@@ -47,14 +47,14 @@ class UsersController < ApplicationController
     puts 'BYEE!!'
     puts params[:voice]
     audio = params[:voice]
+    puts Rails.root
+    # save_path = Rails.root.join("/#{audio.original_filename}")
     
-    save_path = Rails.root.join("/home/vpodilnyk/projects/ruby/#{audio.original_filename}")
-
-    audio.rewind
-    # Open and write the file to file system.
-    File.open(save_path, 'wb') do |f|
-      f.write audio.read
-    end
+    # audio.rewind
+    # # Open and write the file to file system.
+    # File.open(save_path, 'wb') do |f|
+    #   f.write audio.read
+    # end
     redirect_to :controller => "users" , :action => 'index', :alert => 1
   end
 

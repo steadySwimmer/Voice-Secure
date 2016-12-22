@@ -89,12 +89,12 @@ body{
 }
 .chat-body .answer.left {
     padding: 0 0 0 58px;
-    text-align: center;
+    text-align: left;
     float: left;
 }
 .chat-body .answer {
     position: relative;
-    max-width: 150px;
+    max-width: 600px;
     overflow: hidden;
     clear: both;
 }
@@ -167,7 +167,7 @@ body{
 /*RIGHT*/
 .chat-body .answer.right {
     padding: 0 58px 0 0;
-    text-align: center;
+    text-align: right;
     float: right;
 }
 

@@ -65,11 +65,6 @@ class UsersController < ApplicationController
     redirect_to :controller => "users" , :action => 'index', :alert => 1
   end
 
-  #GET /play/url
-  def play
-
-  end
-
 
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json

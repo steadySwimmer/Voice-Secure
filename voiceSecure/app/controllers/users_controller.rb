@@ -10,7 +10,13 @@ class UsersController < ApplicationController
     puts 'HEEEYY!!'
     @users = User.not.in(_id: [current_user.id])
     @curr_user = current_user
-    @another_user = params
+    
+    if params.key?(:id)
+      @another_user = User.find(params[:id])
+    else
+      @another_user = @users.first
+    end
+
   end
 
   # GET /users/1
@@ -49,7 +55,9 @@ class UsersController < ApplicationController
     puts 'BYEE!!'
     puts params[:voice]
     audio = params[:voice]
-    
+
+    puts "kek=>",  @another_user
+
     save_path = Rails.root.join("/home/vpodilnyk/projects/ruby/#{audio.original_filename}")
 
     audio.rewind

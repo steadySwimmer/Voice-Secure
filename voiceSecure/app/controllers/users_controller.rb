@@ -1,4 +1,4 @@
-$LOAD_PATH << '/Users/ivan/Developer/Voice-secure/encrypt_part'
+$LOAD_PATH << Rails.root.join('../encrypt_part/')
 require 'open-uri'
 require 'test'
 
@@ -9,7 +9,8 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    @users = User.not.in(_id: [current_user.id])   
+    @users = User.not.in(_id: [current_user.id])
+       
     if params.key?(:id)
       @another_user = User.find(params[:id])
     else

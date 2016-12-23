@@ -59,7 +59,7 @@
 
   function play_me(cryptURL) {
     console.log(cryptURL);
-     var formData = new FormData();
+    var formData = new FormData();
     formData.append('url', cryptURL);
     $.ajax({
         type: "POST",
@@ -139,10 +139,8 @@
                     <audio id="audioPlayer2" controls="none">
                       <% if params[:name] && params[:old_name] == msg.msg_ref -%>
                         <source src="<%=audio_path params[:name] %>" type="audio/wav">
-                        <!-- <script> alert('Okay')</script> -->
                       <% else -%>
                         <source src="<%=audio_path msg.msg_ref %>" type="audio/wav">
-                        <!-- <script> alert('<%= msg.msg_ref %>')</script> -->
                       <% end -%>
                     </audio>
                     <div>

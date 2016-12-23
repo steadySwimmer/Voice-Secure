@@ -19,7 +19,7 @@ class UsersController < ApplicationController
 
     @from_msg = Message.where({from_email: current_user.email, to_email: @another_user.email})
     @to_msg = Message.where({from_email: @another_user.email, to_email: current_user.email})
-    puts @from_msg
+    
     @array = Array.new
     if @from_msg.size > @to_msg.size
       i = 0
@@ -82,10 +82,10 @@ class UsersController < ApplicationController
     if params.key?(:voice) 
       audio = params[:voice]
       msg_ref = save_file audio
-
+      puts 'record ref %s' %msg_ref
       @another_user = User.find(params[:user])
       msg = Message.create(from_email: current_user.email, to_email: @another_user.email, msg_ref: msg_ref)
-      redirect_to :controller => "users" , :action => 'index'
+      redirect_to :controller => "users" , :action => 'index', :id => params[:user]
     else 
       puts params[:url]
       crypt_file_path = params[:url]
@@ -97,7 +97,7 @@ class UsersController < ApplicationController
       puts name 
       puts params[:url]
 
-      redirect_to :controller => "users" , :action => 'index', :name => name, :old_name => params[:url], :id => params[:user]
+      redirect_to :controller => "users" , :action => 'index', :name => name, :old_name => params[:url]
     end
   end
 
@@ -113,6 +113,7 @@ class UsersController < ApplicationController
 
       crypt_file_url = Crypt.encrypt save_path
       File.delete(save_path)
+      puts 'decrypt url %s' %crypt_file_url
       return crypt_file_url
     rescue Exception => exc 
       puts "Troubles with #{audio_file}; #{exc.message}"

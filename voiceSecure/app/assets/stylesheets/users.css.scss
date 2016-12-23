@@ -89,7 +89,7 @@ body{
     margin: 0 0 20px;
 }
 .chat-body .answer.left {
-    padding: 0 0 0 58px;
+    padding: 0 0 58px 58px;
     text-align: left;
     float: left;
 }
@@ -177,7 +177,7 @@ body{
 }
 /*RIGHT*/
 .chat-body .answer.right {
-    padding: 0 58px 0 0;
+    padding: 0 58px 58px 0;
     text-align: right;
     float: right;
 }
@@ -209,7 +209,8 @@ body{
     position: relative;
     margin: 20px -20px -20px;
     padding: 20px;
-    background: #46be8a;
+    background: #99ccff;
+    border-radius: 15px; 
 }
 .chat-body .answer-add input {
     border: none;

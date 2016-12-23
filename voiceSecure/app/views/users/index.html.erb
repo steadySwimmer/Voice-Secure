@@ -104,7 +104,10 @@
             <div class="chat-body">
 
               <!-- Begin left -->
-              <% @from_msg.each do |msg| %>
+
+              <% @array.each do |msg| %>
+              <% unless msg.nil? %>
+                <% unless msg.from_email == current_user.email %>
                 <div class="answer left">
                   <div class="avatar">
                     <%= image_tag "default_profile.png" %>
@@ -122,13 +125,10 @@
                       <button onclick="document.getElementById('audioPlayer').pause();stop_me();">Stop</button>
                     </div> 
                   </div>
-
                 </div>
-              <% end %>
               <!-- End left -->
-
+                <% else %>
               <!-- Begin right -->
-              <% @to_msg.each do |msg| %>
                 <div class="answer right">
                   <div class="avatar">
                     <%= image_tag "default_profile.png" %>
@@ -146,6 +146,8 @@
                     </div> 
                   </div>
                 </div>
+                <% end %>
+              <% end %>
               <% end %>
               <!-- End right -->
 

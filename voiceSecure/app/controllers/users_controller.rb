@@ -19,7 +19,30 @@ class UsersController < ApplicationController
 
     @from_msg = Message.where({from_email: current_user.email, to_email: @another_user.email})
     @to_msg = Message.where({from_email: @another_user.email, to_email: current_user.email})
+    puts @from_msg
+    @array = Array.new
+    if @from_msg.size > @to_msg.size
+      i = 0
+      @to_msg.each do |m|
+        @array.push(m, @from_msg[i])
+        ++i
+      end
 
+      (i..@from_msg.size - 1).each do |m|
+        @array.push(@from_msg[m])
+      end
+
+    else
+      i = 0
+      @from_msg.each do |m|
+        @array.push(m, @to_msg[i])
+        ++i
+      end
+
+      (i..@to_msg.size - 1).each do |m|
+        @array.push(@to_msg[m])
+      end
+    end
   end
 
   # GET /users/1
@@ -63,7 +86,7 @@ class UsersController < ApplicationController
     puts @another_user
     msg = Message.create(from_email: current_user.email, to_email: @another_user.email, msg_ref: msg_ref)
 
-    redirect_to :controller => "users" , :action => 'index', :alert => 1
+    redirect_to :controller => "users" , :action => 'index', :alert => 1, :id => params[:user]
   end
 
   def save_file (audio_file) 

@@ -52,7 +52,6 @@ module Crypt
             new_file = File.open(file_name, 'wb')
             new_file.puts(crypt)
             new_file.close()
-            
             return file_name
         rescue Exception => exc
             puts ("Message for decryption #{msg} = #{exc.message}")

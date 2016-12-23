@@ -54,15 +54,27 @@ class UsersController < ApplicationController
 
   # POST /record
   def record 
-    audio = params[:voice]
-    puts params[:user]
-    msg_ref = save_file audio
+    puts 'Record'
+    if params.key?(:voice) 
+      audio = params[:voice]
+      msg_ref = save_file audio
 
-    @another_user = User.find(params[:user])
-    puts @another_user
-    msg = Message.create(from_email: current_user.email, to_email: @another_user.email, msg_ref: msg_ref)
+      @another_user = User.find(params[:user])
+      msg = Message.create(from_email: current_user.email, to_email: @another_user.email, msg_ref: msg_ref)
+      redirect_to :controller => "users" , :action => 'index'
+    else 
+      puts params[:url]
+      crypt_file_path = params[:url]
 
-    redirect_to :controller => "users" , :action => 'index', :alert => 1
+      audioURL = Crypt.decrypt crypt_file_path
+      puts 'URL %s' %audioURL
+      name = audioURL.split('/')[-1]
+      
+      puts name 
+      puts params[:url]
+
+      redirect_to :controller => "users" , :action => 'index', :name => name, :old_name => params[:url]
+    end
   end
 
   def save_file (audio_file) 
@@ -87,8 +99,18 @@ class UsersController < ApplicationController
   def get_record
     puts 'Get record'
     puts params[:url]
+    # crypt_file_path = params[:url]
 
-    redirect_to :controller => "users" , :action => 'index' 
+    # audioURL = Crypt.decrypt crypt_file_path
+    # puts 'URL %s' %audioURL
+
+    # name = audioURL.split('/')[-1]
+    # old_name = crypt_file_path.split('/')[-1]
+    # puts name 
+    # puts old_name
+
+    redirect_to :controller => "users" , :action => 'record'
+    # :old_name => old_name
   end
 
   def take_file 

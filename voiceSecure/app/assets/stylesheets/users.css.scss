@@ -82,6 +82,7 @@ body{
     text-overflow: ellipsis;
 }
 
+
 /*****************CHAT BODY *******************/
 .chat-body h6 {
     font-size: 20px;
@@ -113,6 +114,16 @@ body{
     display: block;
     border-radius: 20px;
     height: 100%;
+}
+
+.chat .record {
+    border-radius: 15px;
+    background: #32b5a1;
+    font-size: 15px;
+    padding: 5px; 
+    text-align: center;
+    width: 160px;
+    height: 30px; 
 }
 
 .sound {

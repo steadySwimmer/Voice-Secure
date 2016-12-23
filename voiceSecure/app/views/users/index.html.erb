@@ -31,6 +31,7 @@
 
   function start() {
       recordRTC.startRecording();
+      document.getElementById('record_label').innerHTML = 'Recording';
   }
 
   function upload(blobOrFile, user) {
@@ -43,22 +44,29 @@
         data: formData, 
         processData: false,
         contentType: false
+    }).done(function(res) {
+      document.getElementById('record_label').innerHTML = 'Ready to record';
     });
   }
 
   function stop(user_id) {
     recordRTC.stopRecording(function(audioURL) {
       var audio_blob = recordRTC.blob;
+      document.getElementById('record_label').innerHTML = 'Recorded';
       upload(audio_blob, user_id);
     });
   };
 
   function play_me(cryptURL) {
     console.log(cryptURL);
+     var formData = new FormData();
+    formData.append('url', cryptURL);
     $.ajax({
-      type: "GET",
-      url: "/get_record",
-      data: {'url': cryptURL}
+        type: "POST",
+        url: "/record",
+        data: formData, 
+        processData: false,
+        contentType: false
     });
   };
 
@@ -69,15 +77,13 @@
 </script>
 
 
-<% if params[:alert] -%>
-  <div class="alert alert-success alert-dismissable fade in">
-    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    <strong>Success!</strong>
-  </div>
+<% if params[:name] -%>
+  <h1>Wake up</h1>
+<% else %> 
+  <h1>Go sleep</h1>
 <% end -%>
 
 <body>
-
 
 <div class="content container-fluid bootstrap snippets">
       <div class="row row-broken">
@@ -137,7 +143,13 @@
                   <!-- Message right  -->
                   <div class="text">
                     <audio id="audioPlayer2" controls="none">
-                      <source src="<%=audio_path msg.msg_ref%>" type="audio/wav">
+                      <% if params[:name] && params[:old_name] == msg.msg_ref -%>
+                        <source src="<%=audio_path params[:name] %>" type="audio/wav">
+                        <!-- <script> alert('Okay')</script> -->
+                      <% else -%>
+                        <source src="<%=audio_path msg.msg_ref %>" type="audio/wav">
+                        <!-- <script> alert('<%= msg.msg_ref %>')</script> -->
+                      <% end -%>
                     </audio>
                     <div>
                       <button onclick="document.getElementById('audioPlayer2').play();play_me('<%=msg.msg_ref%>');">Play</button>
@@ -155,6 +167,7 @@
                   <button type="button" class="btn btn-danger" id='btnStopRecording' onclick="stop('<%=@another_user.id%>')">Stop
                   </button>
                 </div> 
+                <label class="record" id="record_label">Ready to record</label>
               </div>
 
             </div>

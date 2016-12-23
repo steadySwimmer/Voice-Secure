@@ -76,13 +76,6 @@
 
 </script>
 
-
-<% if params[:name] -%>
-  <h1>Wake up</h1>
-<% else %> 
-  <h1>Go sleep</h1>
-<% end -%>
-
 <body>
 
 <div class="content container-fluid bootstrap snippets">
@@ -90,7 +83,7 @@
         <div class="col-sm-3 col-xs-12">
           <div class="col-inside-lg decor-default chat" style="overflow: hidden; outline: none;" tabindex="5000">
             <div class="chat-users">
-              <h6>Online</h6>
+              <h6>Users</h6>
               <% @users.each do |user| %>
                 <%= link_to msg_path(:id => user.id) do %>
                 <div class="user">
@@ -108,9 +101,12 @@
         <div class="col-sm-9 col-xs-12 chat" style="overflow: hidden; outline: none;" tabindex="5001">
           <div class="col-inside-lg decor-default">
             <div class="chat-body">
-              
+
               <!-- Begin left -->
-              <% @to_msg.each do |msg| %>
+              <% @array.each do |msg| %>
+              <% unless msg.nil? %>
+                <% unless msg.from_email == current_user.email %>
+
                 <div class="answer left">
                   <div class="avatar">
                     <%= image_tag "default_profile.png" %>
@@ -129,11 +125,9 @@
                     </div> 
                   </div>
                 </div>
-              <% end %>
               <!-- End left -->
-
+                <% else %>
               <!-- Begin right -->
-              <% @from_msg.each do |msg| %>
                 <div class="answer right">
                   <div class="avatar">
                     <%= image_tag "default_profile.png" %>
@@ -157,6 +151,8 @@
                     </div> 
                   </div>
                 </div>
+                <% end %>
+              <% end %>
               <% end %>
               <!-- End right -->
 
@@ -164,7 +160,8 @@
                 <h16>Record your message</h16><br / >
                 <div class="btn-group">
                   <button type="button" class="btn btn-primary" id='btnStartRecording' onclick="start()">Record</button>
-                  <button type="button" class="btn btn-danger" id='btnStopRecording' onclick="stop('<%=@another_user.id%>')">Stop
+                  <button type="button" class="btn btn-danger" id='btnStopRecording' onclick="stop('<%=@another_user.id%>')">
+                    Stop
                   </button>
                 </div> 
                 <label class="record" id="record_label">Ready to record</label>

@@ -9,7 +9,8 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    @users = User.not.in(_id: [current_user.id])   
+    @users = User.not.in(_id: [current_user.id])
+       
     if params.key?(:id)
       @another_user = User.find(params[:id])
     else
@@ -18,7 +19,30 @@ class UsersController < ApplicationController
 
     @from_msg = Message.where({from_email: current_user.email, to_email: @another_user.email})
     @to_msg = Message.where({from_email: @another_user.email, to_email: current_user.email})
+    puts @from_msg
+    @array = Array.new
+    if @from_msg.size > @to_msg.size
+      i = 0
+      @to_msg.each do |m|
+        @array.push(m, @from_msg[i])
+        ++i
+      end
 
+      (i..@from_msg.size - 1).each do |m|
+        @array.push(@from_msg[m])
+      end
+
+    else
+      i = 0
+      @from_msg.each do |m|
+        @array.push(m, @to_msg[i])
+        ++i
+      end
+
+      (i..@to_msg.size - 1).each do |m|
+        @array.push(@to_msg[m])
+      end
+    end
   end
 
   # GET /users/1
@@ -73,7 +97,7 @@ class UsersController < ApplicationController
       puts name 
       puts params[:url]
 
-      redirect_to :controller => "users" , :action => 'index', :name => name, :old_name => params[:url]
+      redirect_to :controller => "users" , :action => 'index', :name => name, :old_name => params[:url], :id => params[:user]
     end
   end
 

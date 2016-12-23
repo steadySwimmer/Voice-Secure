@@ -72,6 +72,7 @@
 
   function stop_me() {
     console.log('stop');
+    window.location.href = '/users';
   };
 
 </script>
@@ -116,7 +117,11 @@
                   <!-- Message left  -->
                   <div class="text">
                     <audio id="audioPlayer" controls="none">
-                      <source src="<%=audio_path msg.msg_ref%>" type="audio/wav">
+                      <% if params[:name] && params[:old_name] == msg.msg_ref -%>
+                        <source src="<%=audio_path params[:name] %>" type="audio/wav">
+                      <% else -%>
+                        <source src="<%=audio_path msg.msg_ref %>" type="audio/wav">
+                      <% end -%>
                     </audio>
                     
                     <div>

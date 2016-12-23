@@ -17,7 +17,7 @@ body{
     height: calc(100vh - 180px);
 }
 .decor-default {
-    background-color: #ffffff;
+    background-color: #f2f2f2;
 }
 .chat-users h6 {
     font-size: 20px;
@@ -46,7 +46,7 @@ body{
 }
 .chat .avatar .status.off {
     border: 1px solid #5a5a5a;
-    background: #ffffff;
+    background:  #9fff80;
 }
 .chat .avatar .status.online {
     background: #4caf50;
@@ -87,6 +87,7 @@ body{
 .chat-body h6 {
     font-size: 20px;
     margin: 0 0 20px;
+    background-color: #cce0ff;
 }
 .chat-body .answer.left {
     padding: 0 0 58px 58px;
